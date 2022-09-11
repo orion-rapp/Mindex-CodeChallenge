@@ -35,6 +35,13 @@ namespace CodeChallenge.Controllers
 
             return CreatedAtRoute("getEmployeeById", new { id = employee.EmployeeId }, employee);
         }
+        
+        [HttpPost("Compensation")]
+        public IActionResult CreateEmployeeComensation([FromBody] Compensation compensation)
+        {
+            throw new NotImplementedException();
+        }
+
 
         [HttpGet("{id}", Name = "getEmployeeById")]
         public IActionResult GetEmployeeById(String id)
@@ -60,6 +67,12 @@ namespace CodeChallenge.Controllers
                 return NotFound();
 
             return Ok(reportStructure);
+        }
+
+        [HttpGet("{id}/Compensation")]
+        public IActionResult GetEmployeeCompensationById(string id)
+        {
+            throw new NotImplementedException();
         }
 
 
