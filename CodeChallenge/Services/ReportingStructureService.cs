@@ -17,7 +17,33 @@ namespace CodeChallenge.Services
 
         public ReportingStructure GetReportingStructureById(string id)
         {
-            throw new NotImplementedException();
+            ReportingStructure result = null;
+            if (!String.IsNullOrEmpty(id))
+            {
+                var employee = _employeeService.GetById(id);
+                if (employee == null) throw new Exception($"Employee Id {id} not found.");
+                var numberOfReports = GetDirectReportsHelper(employee);
+                result = new ReportingStructure()
+                {
+                    Employee = employee,
+                    NumberOfReports = numberOfReports
+                };
+            }
+            return result;
+        }
+
+        private int GetDirectReportsHelper(Employee employee)
+        {
+            if (employee.DirectReports != null && employee.DirectReports.Count > 0)
+            {
+                int result = 0;
+                foreach (var dr in employee.DirectReports)
+                {
+                    result += 1 + GetDirectReportsHelper(dr);
+                }
+                return result;
+            }
+            else return 0;
         }
     }
 }

@@ -23,7 +23,14 @@ namespace CodeChallenge.Controllers
         [HttpGet("{id}", Name = "getReportingStructureById")]
         public IActionResult GetReportingStructureById(string id)
         {
-            throw new NotImplementedException();
+            _logger.LogDebug($"Received report structure get request for '{id}'");
+
+            var reportStructure = _reportingStructureService.GetReportingStructureById(id);
+
+            if (reportStructure == null)
+                return NotFound();
+
+            return Ok(reportStructure);
         }
         
     }

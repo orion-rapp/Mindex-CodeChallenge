@@ -38,7 +38,7 @@ namespace CodeChallenge.Tests.Integration
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             var reportingStructure = response.DeserializeContent<ReportingStructure>();
-            Assert.AreEqual(reportingStructure.NumberOfReports, numberOfReports);
+            Assert.AreEqual(numberOfReports, reportingStructure.NumberOfReports);
         }
     }
 }
