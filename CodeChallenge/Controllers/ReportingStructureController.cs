@@ -6,6 +6,11 @@ using System;
 
 namespace CodeChallenge.Controllers
 {
+    /// <summary>
+    /// In the original ReadMe.md, it didn't specify if the new endpoint for ReportingStructure
+    /// should exist in a new controller or if it should exist on it's own controller.
+    /// For flexibility/thoroughness I implemented the endpoint in both places.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ReportingStructureController : ControllerBase
@@ -32,6 +37,5 @@ namespace CodeChallenge.Controllers
 
             return Ok(reportStructure);
         }
-        
     }
 }

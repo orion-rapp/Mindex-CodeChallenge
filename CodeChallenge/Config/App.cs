@@ -31,7 +31,6 @@ namespace CodeChallenge.Config
                 app.UseDeveloperExceptionPage();
                 SeedEmployeeDB();
             }
-            SeedEmployeeDB();
             app.UseAuthorization();
 
             app.MapControllers();

@@ -29,7 +29,10 @@ namespace CodeChallenge.Data
             }
         }
 
-        private List<Employee> LoadEmployees()
+        // In the given solution, prior to any of my changes,
+        // the dbContext would not save the FixUpReferences version of the data.
+        // I made this public so the Employee Repo Service could access the Seeded data with the benefits of FixUpReferences()
+        public List<Employee> LoadEmployees()
         {
             using (FileStream fs = new FileStream(EMPLOYEE_SEED_DATA_FILE, FileMode.Open))
             using (StreamReader sr = new StreamReader(fs))
