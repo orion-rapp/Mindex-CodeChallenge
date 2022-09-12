@@ -9,6 +9,7 @@ namespace CodeChallenge.Services
     public interface IEmployeeService
     {
         Employee GetById(String id);
+        Employee GetById_WithDirectReports(string id);
         Employee Create(Employee employee);
         Employee Replace(Employee originalEmployee, Employee newEmployee);
     }

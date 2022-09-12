@@ -1,29 +1,38 @@
 ﻿using CodeChallenge.Data;
 using CodeChallenge.Models;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 
 namespace CodeChallenge.Repositories
 {
-    public class CompensationRepository
+    public class CompensationRepository : ICompensationRepository
     {
         private readonly ILogger<CompensationRepository> _logger;
-        private EmployeeContext _employeeContext;
+        private EmployeeContext _employeeContex;
 
-        public CompensationRepository(ILogger<CompensationRepository> logger, EmployeeContext employeeContext)
+        public CompensationRepository(ILogger<CompensationRepository> logger, EmployeeContext employeeContex)
         {
             _logger = logger;
-            _employeeContext = employeeContext;
+            _employeeContex = employeeContex;
         }
 
         public Compensation Add(Compensation compensation)
         {
-            throw new NotImplementedException();
+            compensation.Id = Guid.NewGuid().ToString();
+            _employeeContex.Compensations.Add(compensation);
+            _employeeContex.SaveChangesAsync().Wait();
+            return compensation;
         }
 
         public Compensation GetById(string id)
         {
-            throw new NotImplementedException();
+            var result = _employeeContex.Compensations.FirstOrDefault(e => e.EmployeeId == id);
+            // TODO: Make foreign key relationship in Employee context 
+            //       to make the following line of code unecessary.
+            result.Employee = _employeeContex.Employees.FirstOrDefault(e => e.EmployeeId == id);
+            return result;
         }
     }
 }

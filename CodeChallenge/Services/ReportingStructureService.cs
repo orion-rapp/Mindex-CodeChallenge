@@ -20,7 +20,7 @@ namespace CodeChallenge.Services
             ReportingStructure result = null;
             if (!String.IsNullOrEmpty(id))
             {
-                var employee = _employeeService.GetById(id);
+                var employee = _employeeService.GetById_WithDirectReports(id);
                 if (employee == null) throw new Exception($"Employee Id {id} not found.");
                 var numberOfReports = GetDirectReportsHelper(employee);
                 result = new ReportingStructure()
@@ -39,11 +39,11 @@ namespace CodeChallenge.Services
                 int result = 0;
                 foreach (var dr in employee.DirectReports)
                 {
-                    result += 1 + GetDirectReportsHelper(dr);
+                    result += 1 + GetDirectReportsHelper(dr);  // recursive call
                 }
-                return result;
+                return result; 
             }
-            else return 0;
+            else return 0; // tail
         }
     }
 }

@@ -39,13 +39,12 @@ namespace CodeChallenge.Repositories
 
         public Employee GetById(string id)
         {
-            var result = _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
-            if (result.DirectReports == null) // null if they have direct reports but dbContext isn't saving propperly after FixUpReferences() runs
-                                              // or if they really do not have direct reports
-            {
-                result = _repoAsList.SingleOrDefault(e => e.EmployeeId == id);
-            }
-            return result;
+            return _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+        }
+
+        public Employee GetById_WithDirectReports(string id)
+        {
+            return _repoAsList.SingleOrDefault(e => e.EmployeeId == id);
         }
 
         public Task SaveAsync()

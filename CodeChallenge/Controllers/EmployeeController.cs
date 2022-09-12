@@ -16,14 +16,17 @@ namespace CodeChallenge.Controllers
         private readonly ILogger _logger;
         private readonly IEmployeeService _employeeService;
         private readonly IReportingStructureService _reportingStructureService;
+        private readonly ICompensationService _compensationService;
 
         public EmployeeController(  ILogger<EmployeeController> logger, 
                                     IEmployeeService employeeService,   
-                                    IReportingStructureService reportingStructureService)
+                                    IReportingStructureService reportingStructureService,
+                                    ICompensationService compensationService)
         {
             _logger = logger;
             _employeeService = employeeService;
             _reportingStructureService = reportingStructureService;
+            _compensationService = compensationService;
         }
 
         [HttpPost]
@@ -36,10 +39,20 @@ namespace CodeChallenge.Controllers
             return CreatedAtRoute("getEmployeeById", new { id = employee.EmployeeId }, employee);
         }
         
-        [HttpPost("Compensation")]
-        public IActionResult CreateEmployeeComensation([FromBody] Compensation compensation)
+        [HttpPost("{id}/compensation")]
+        public IActionResult CreateEmployeeComensation(String id, [FromBody] Compensation compensation)
         {
-            throw new NotImplementedException();
+            _logger.LogDebug($"Recieved compensation create request for '{id}'");
+
+            // Since Employee is a required property of Compensation, check for Employee entity by Id first
+            var employee = _employeeService.GetById(id);
+            if (employee == null)
+                return NotFound();
+
+            compensation.EmployeeId = id;
+            var result = _compensationService.Create(compensation);
+
+            return CreatedAtRoute("getCompensationById", new { id = id }, compensation);
         }
 
 
@@ -69,10 +82,17 @@ namespace CodeChallenge.Controllers
             return Ok(reportStructure);
         }
 
-        [HttpGet("{id}/Compensation")]
+        [HttpGet("{id}/Compensation", Name = "getCompensationById")]
         public IActionResult GetEmployeeCompensationById(string id)
         {
-            throw new NotImplementedException();
+            _logger.LogDebug($"Recieved compensation get request for '{id}'");
+
+            var compensation = _compensationService.GetById(id);
+
+            if (compensation == null)
+                return NotFound();
+
+            return Ok(compensation);
         }
 
 
@@ -84,7 +104,7 @@ namespace CodeChallenge.Controllers
             var existingEmployee = _employeeService.GetById(id);
             if (existingEmployee == null)
                 return NotFound();
-
+            
             _employeeService.Replace(existingEmployee, newEmployee);
 
             return Ok(newEmployee);
